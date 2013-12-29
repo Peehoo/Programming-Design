@@ -1,0 +1,95 @@
+Name: Peehoo Dewan
+USC loginid: pdewan@usc.edu
+CSCI 455 PA4
+Fall 2013
+
+----------------------------------------------
+CERTIFY IT'S YOUR WORK
+
+"I certify that the work submitted for this assignment does not
+violate USC's student conduct code.  In particular, the work is my
+own, not a collaboration, and does not involve code created by other
+people, except for the the resources explicitly mentioned in the CS 455
+Course Syllabus.  And I did not share my solution or parts of it with
+other students in the course."
+
+Initial below to "sign" the above statement:
+
+PD
+----------------------------------------------
+ACKNOWLEDGE ANY OUTSIDE SOURCES
+
+List here any code you submitted for this assignment that was written
+with significant help of a course staff member, or code used from the
+textbook.  Be specific about what methods or algorithms are involved,
+and what sections of the textbook are involved (if applicable): [you do
+not need to list any of the code that we wrote for the assignment,
+i.e., the contents of the starter files for the assignment]
+
+
+
+----------------------------------------------
+KNOWN BUGS or LIMITATIONS:
+
+
+I have implemented my program using three classes GenText.java, Prefix.java and 
+RandomTextGenerator.java. The algorithms and data structures used in the class 
+design are as follows:
+
+1. RandomTextGenerator - I have used 2 data structures: an ArrayList containing 
+objects of type Prefix (used for random prefix selection) and a HashMap which stores 
+key-value pairs having Key as a Prefix object and value as ArrayList of strings 
+(list of all words that would come after this Prefix object). 
+There are multiple words that may follow the same prefix, I have 
+chosen an ArrayList to store values instead of a LinkedList because we need random access
+when we try to return the next word after prefix and random access is more efficient for
+ArrayList as compared to LinkedList. Same prefix objects are stored in the ArrayList 
+and Map so that the space is not wasted.
+
+Although I have made isValidRandomTextGenerator() method to check the representation invariants
+but I havn't called it anywhere since I believe that would increase the time complexity from 
+O(m+n) to O(mn). Moreover, I don't have any mutator methods in this class, so I feel that calling
+this method is unnecessary but I made it anyway since professor asked.
+
+2. Prefix - Although we should ideally make this as an immutable class (since its used as a key in Hashmap) but that would make
+it very inefficient for operations  like adding a word. In my solution, only one method addWordIn mutates the class. 
+I have also implemented a method addWord that is an immutable version of addWordIn.
+
+I have used a linkedList data structure to implement prefix class. I chose
+LinkedList over ArrayList since we are adding and removing elements from the front and
+end of the list and LinkedList is more efficient for adding/removing from ends as compared
+to ArrayList. 
+
+I have made isValidPrefix method to check whether the representation invariants for Prefix
+class is satisfied at after every method call.
+
+I am also implementing the equals and hashcode method of Prefix since it is used as a Key to the HashMap.
+Since a Prefix is never mutated after it is added to the HashMap, we do not need to compute the hashcode again and again.
+Hence, to make things efficient, I am caching the hashcode of the class in an instance variable after it is calculated for the first time.
+The subsequent calls to the hashcode just return the instance variable instead of computing the hashcode again that takes O(n) time.
+
+
+3. The GenText class implements the main method that takes arguments from command line, reads the source file and builds the ArrayList 
+an HashMap of Prefixes on the fly while reading the source file. After reading the source file, 
+	Step 1. We randomly select a Prefix from the Arraylist (excluding the last one in the list), then look for the prefix in the HashMap. 
+	Step 2. If the Prefix is present as a key in the HashMap, we get the value (ArrayList of words) for the key (Prefix), and randomly 
+	choose a word among the ArrayList of words and the next word and add it to the out file. We then update our current prefix by adding 
+	the new word and removing its first word. We repeat Step 1 again until we have generated the required number of words. 
+	Step 3. If the prefix is not present in the map, we repeat Step 1 again until we have generated the required number of words. 
+	
+Time Complexity Analysis. 
+
+Considering the prefix length as a constant.
+1. The construction of ArrayList and HashMap on the fly takes O(n), where n is number of words in the sample text.
+2. To generate a random word it takes a constant time since we are using a Map to store possible next words to a Prefix. 
+   To generate m words, we would need O(m), where m is the number of words to be generated.
+
+Hence, the total time complexity of our solution is O(m+n).
+
+----------------------------------------------
+DESCRIPTION OF YOUR CLASS DESIGN AND ALGORITHMS AND DATA STRUCTURES USED:
+
+
+
+----------------------------------------------
+ANY OTHER NOTES FOR THE GRADER:

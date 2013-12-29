@@ -1,0 +1,558 @@
+
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en"><html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en]C-CCK-MCD   (WinNT; I) [Netscape]">
+
+<title>PA5 CS 455</title></head>
+
+
+<body bgcolor="#ffffff">
+
+<center>
+<h2>
+CS 455 Programming Assignment 5</h2></center>
+
+<div align="right">Fall 2013 [Bono]
+<br>
+<strong>Due:</strong> Wednesday, Dec. 4, 11:59pm
+</div>
+
+<hr>
+
+<a name="intro"><h3>Introduction and Background</h3></a>
+
+In this assignment you will use C++ linked lists to implement a data
+structure we have studied in this class: a hash table.  The hash table
+is in a class called <kbd>Table</kbd> (what you know as a map).  To
+make it more interesting, we're going to test our class in two
+different programs: one is a command-based test driver you will write
+(a program to maintain student names and scores), and the other is a
+C++ version of the concordance program we wrote in lab 8.  We wrote
+the concordance program for you.
+<p>
+Note that there is a very short time-line on this assignment: there's
+only about two weeks to complete it.  We recommend you start
+immediately.  To help you complete the program successfully and on
+time we have included some development hints and a suggested milestone
+<a href="#devel">later</a> in this document.
+
+<p>
+To be able to use a C++ class in multiple programs, but not end up
+with multiple versions of our class code, these are going to be
+multi-file programs that use separate compilation and a Makefile.  We
+will be discussing these topics more in lecture soon.  However, we
+wrote the Makefile for you, and put all the necessary include
+statements in the source files so as to make this aspect of the
+assignment as painless as possible for you.  <strong>Note: it will not work to use the regular g++ command to compile this program.</strong>  There are more specifics
+about this in the <a href="#fileorg">File Organization</a> section below.
+<p>
+
+<a name="files"><h3>The assignment files</h3> 
+</a>
+
+<strong>Getting the assignment files.</strong> 
+Make a PA5 directory and cd into it.
+The following command will copy or link the necessary files to your current directory:
+<pre>
+gmake -f ~csci455/assgts/pa5/Makefile getfiles
+</pre>
+
+<p>
+
+The files in <strong><tt>bold</tt></strong></a> below are ones you
+modify and submit.  The ones not in bold are ones that you will use, but
+ not modify.
+
+<ul>
+
+
+<li>
+<strong>
+<a href="Table.h"><kbd>Table.h</kbd></a>
+</strong> Header file for the Table
+class.  This contains the Table class definition (but not the method
+implementations).  More about this in the section on the <a
+href="#table">Table class</a>.
+
+<li><strong>
+<a href="Table.cpp"><kbd>Table.cpp</kbd></a>
+</strong> Implementation file for the
+Table class.  This contains Table method definitions.  More about
+this in the section on the <a href="#table">Table class</a>.
+
+<li><strong> <a href="grades.cpp"><kbd>grades.cpp</kbd></a> </strong>
+Test program for our Table class.  We gave you a skeleton version that
+does the command-line argument handling, you'll be writing the rest of
+this program.  More about this in the section on the <a
+href="#grades">grades program</a>.
+
+
+<li>
+<a href="concord.cpp"><kbd>concord.cpp</kbd></a>
+A second program to try out your
+Table class with.  More about this in the section on the <a
+href="#concord">concord program</a>.
+
+<li><a href="melville.txt"><kbd>melville.txt</kbd></a> and <a
+href="melville.txt"><kbd>poe.txt</kbd></a> Some text files to test the
+concordance program on.
+
+<li><a href="Makefile"><kbd>Makefile</kbd></a> A file with rules for
+  the "gmake" command.  In particular this Makefile has rules to
+  download the data files and itself, for compiling the source code to
+  make the executables, and for submitting the program.  There are
+  comments at the top of the file telling you how to use it.
+  
+
+<a name="certification">
+<li><a href="README"><strong><kbd>README</kbd></strong></a> 
+See
+section on <a href="#submit">Submitting your program</a> for what to
+put in it.  Before you start the assignment please read the following 
+statement which you will be "signing" in the README:
+
+<blockquote>
+"I certify that the work submitted for this assignment does not
+violate USC's student conduct code.  In particular, the work is my
+own, not a collaboration, and does not involve code created by other
+people, with the exception of the resources explicitly mentioned in the CS 455
+Course Syllabus.  And I did not share my solution or parts of it with
+other students in the course."
+</blockquote>
+</a>
+
+
+</ul>
+
+<a name="fileorg"><h3>File organization and compiling multi-file programs in C++</h3>
+
+Separately compiled programs in C++ usually have two files per class:
+<ul>
+
+<li> The header file (suffix <kbd>.h</kbd>) contains the class
+definition.  It also has some preprocessor directives (start with #).
+We've already given you a partially completed header file,
+<a href="Table.h"><kbd>Table.h</kbd></a>, for the Table class; this header file specifies
+the class interface via the class definition and associated comments.
+Any additions you need to make to the class definition go in this
+file: in particular, you will need to add the private data and the
+headers for any private methods here -- as with other classes we have
+specified for you this semester, you will <em>not</em> be making any
+changes to the <kbd>public</kbd> section of this class definition.
+
+<li> The implementation file (suffix <kbd>.cpp</kbd>) contains the
+implementation of the methods.  That is, the complete method
+definitions for all the methods, public and private.  It will also
+have some non-member functions, described <a
+href="#listfuncs">later</a>.  This file needs to #include the class
+header file.  We started your <a href="Table.cpp"><kbd>Table.cpp</kbd></a>, and put the necessary
+#include in it.
+
+</ul>
+
+To make a complete program from the files that comprise the class, we
+need a third source code file with <kbd>main</kbd> in it (suffix
+<kbd>.cpp </kbd>).  This file could also have other helper functions
+used by main.  It needs to #include the header file for any classes it
+uses.  
+For the grades program we already put the necessary #include
+statement in <a href="grades.cpp"><kbd>grades.cpp</kbd></a> for you.  
+See <a href="concord.cpp"><kbd>concord.cpp</kbd></a> as an example of a completed Table client program.
+<p>
+
+<h4>Compiling the program</h4>
+
+For this assignment the <a href="Makefile"><kbd>Makefile</kbd></a> we
+wrote for you takes care of creating the necessary executables from
+the various source code files.  The Makefile has comments that explain
+how to use it for the various tasks it was made for.  Repeated here
+is how you use it to compile your programs (the following are Unix
+shell commands that will work when the Makefile is in the same
+directory as your source code):
+
+<p>
+
+<dl>
+<dt>
+<strong><kbd>gmake grades</kbd></strong>
+</dt>
+<dd>
+Makes the <kbd>grades</kbd> executable.
+</dd>
+<p>
+<dt>
+<strong><kbd>gmake concord</kbd></strong>
+</dt>
+<dd>
+Makes the <kbd>concord</kbd> executable.
+</dd>
+
+<p>
+</dl>
+
+<p>
+Note: The Makefile will also create some .o files in your directory,
+which are compiled versions of the different program modules (roughly
+analogous to Java .class files).
+
+<a name="table"><h3>The <kbd>Table</kbd> class</h3>
+
+<h4>Table interface</h4>
+The Table class is similar in functionality to the Java Map class.  To
+simplify your implementation, this one does not use C++ templates (=
+Java generics), but is fixed to use a key type of <kbd>string</kbd>
+and a value type of <kbd>int</kbd>.  Also to keep things simple, there
+is no iterator interface: the only way to visit all the elements is
+via the <kbd>printAll</kbd> function.
+<p>
+The exact interface for the Table class is given in <a
+href="Table.h">Table.h</a>.  You are not allowed to change the
+interface (i.e., public section) for this class.
+<p>
+<strong>Info about hashStats parameter</strong> The hashStats() method
+is parameterized so you can use it to print out to different output
+streams at different times.  One of these streams is <kbd>cout</kbd>
+and another is <kbd>cerr</kbd> (more about cerr in the comments at the
+top of <a href="concord.cpp">concord.cpp</a>).  You
+write the print statements in this function just as if you were
+writing to cout, but you use the parameter instead.  Here's an
+example of defining and calling a function with an <kbd>ostream</kbd> parameter:
+
+<pre>
+// Param "out" is the output stream to write to.
+// (passed by reference, because "<<" updates the stream object)
+void testOut(ostream &out) {
+   out << "Hello there!" << endl;
+}
+. . .
+// example calls:
+   testOut(cout);
+   testOut(cerr);
+</pre>
+
+You can see an example call to hashStats in the main function in 
+in <a href="concord.cpp">concord.cpp</a>.
+
+<h4>Table implementation</h4>
+
+<p>
+You are required to implement your Table class using a hash table that
+you implement.  This hash table will use chaining via linked lists.
+For this assignment you may not use STL container classes or any other classes not
+implemented by you.
+<p>
+Since the key type is fixed for this hash table, we can fix what the
+hash function is too.  We wrote the hash function for you.  It's
+defined in the private section of the Table class.  
+<p>
+Note: to compare two C++ <kbd>string</kbd>s for equality, you use
+<kbd>==</kbd>.  By the way, the other relational operators are also defined for
+strings as well.
+<p>
+Unlike the Java HashMap, our hash table will be a fixed size once it
+gets created.  There are two constructors for the Table class; one
+that uses a constant in Table to determine the size, and another that
+gets the size to use in a parameter.  The latter makes the class more
+flexible; but we also included it to make it easy for you to test
+your code on <em>very</em> small table sizes so you can force collisions to
+occur.
+<p>
+
+<a name="dynarr"><strong>Dynamic arrays</strong>.
+<br>
+An implication of the client-specified hash size discussed in the
+previous paragraph is that our representation has to involve a dynamic
+array, rather than a fixed size array.  Remember that with a
+fixed-size array in C++, the size is fixed at compile-time, so it's
+impossible to use a value from the client/user.  Once we create the
+dynamic array in our table, however, its size won't change.
+<p>
+Creating a dynamic array looks a lot like creating a Java array,
+except we use a pointer type.  The pointer points to the first element
+in the array.  However, once the array is created we can use normal [] syntax
+to reference elements.
+<p>
+Here is some example code:
+<pre>
+int * arr;         // var decl for a dynamic array of integers
+arr = new int[10];     // create an array of 10 ints
+          // (unlike in java, array elements are not automatically initialized)
+arr[3] = 7;        // put a 7 in a[3]
+cout << arr[10];   // error: invalid array index (exact behavior undefined)
+delete [] arr;     // reclaim memory for the array
+         // (use [] form of delete with anything allocated with [] form of new)
+</pre>
+
+The syntax for declaring our array will be a little hairy, because the
+element type itself will be a pointer.  Each element is going to be a
+<kbd>Node*</kbd> for a linked list:
+
+<pre>
+Node* * data;  // decl for array of pointers to Node (yes, need two *'s)
+data = new Node*[100];    // allocate an array of 100 pointers to Node
+data[0];        // this expression is type Node*
+</pre>
+
+This example should be helpful for you to get started with working
+with this type in the Table class.  You are welcome to create a
+<kbd>ListType</kbd> typedef as well to help abstract the list part of
+things (or you may want to call it <kbd>ChainType</kbd>).  You are
+allowed to nest typedef's inside of a class.  Here's the code we just
+saw using ListType instead.
+
+<p>
+<pre>
+typedef Node * ListType;
+ListType * data;
+data = new ListType[100];
+data[0];         // this expression is type ListType (= Node*)
+</pre>
+<p>
+
+<a name="listfuncs"></a> <strong>Linked list helper
+functions.</strong> <br> One recommendation for managing the
+complexity of this type, and keeping different levels of abstraction
+straight: write linked list routines that take Node* (or ListType) as
+a parameter to do each of the necessary linked list operations for
+dealing with a hash chain.  For example, one such function might be:
+
+<pre>
+bool listRemove(ListType & list, string target);
+</pre>
+
+When your Table code calls listRemove, it would pass to it one element
+of the hash table array.
+<p>
+We recommend you define these functions as regular functions in
+<kbd>Table.cpp</kbd>, rather than trying to make them part of the
+class.  That means they are not part of the Table class itself, but
+they are used by the Table implementation.  In a <a
+href="#devel">later section</a> we will discuss a plan for testing
+these functions independently.
+<p>
+
+<strong>Copy semantics and reclaiming memory</strong>.
+<br>
+
+The Table class contains dynamic data, so we need to be concerned
+about how table objects get copied.  When we pass an object by value,
+the formal parameter is initialized using something called the copy
+constructor.  When we assign one object to another we use the
+assignment (=) operator.  C++ supplies built-in versions of these two
+methods; however, the build-in versions only do a shallow copy, so do
+not work correctly for objects that contain dynamic data.  It's a
+little bit tricky to define these correctly to do deep copy, so we are
+going opt for something simpler here: we are going to
+<em>disallow</em> copying our Table objects. We do this by making the
+headers for those methods private.  We already put the code to
+disallow copies in your <a href="Table.h">Table.h</a> file; you do not
+need to do anything else for this to work the way we want. Table
+objects can still be used as parameters passed by reference or
+const-reference, since that doesn't involve copying the object.
+<p>
+[One note for future reference: even if you create a class that
+disallows copies, you normally would define another method, called a
+destructor, that reclaims the dynamic memory when a client is done
+with your object.  We won't have time to discuss that topic in detail, and
+not having it won't really matter for the way we are using Tables in
+our client programs here, so our Table class is not going to define a destructor.]
+<p>
+Note: you should still reclaim the Node memory no longer needed in
+your <kbd>remove</kbd> method.
+
+<a name="grades"><h3><kbd>grades</kbd> program</h3>
+<p>
+
+This is going to be a simple program to keep track of students and
+their scores in a class.  It's not meant to be ultra-realistic (for
+example, only one score per name, and no way to save scores), but it's really
+a test driver for your <KBD>Table</KBD> implementation.
+<p>
+The program takes one optional command-line argument, the size for the
+hash table -- if the argument is left off the program uses the default
+hash size.  We have already written the code to deal with the command
+line argument (you can see the starter code <a
+href="grades.cpp">here</a>).  When the program starts up it creates a
+hash table, immediately prints out the hashStats() for that empty
+table, and then prints a command line prompt.  In the following
+example of program startup % is the Unix shell prompt and user input
+is shown in italics
+
+<pre>
+% <em>grades 7</em>
+number of buckets: 7
+number of entries: 0
+number of non-empty buckets: 0
+longest chain: 0
+cmd> 
+</pre>
+<p>
+Once this start-up happens the program repeatedly reads and executes
+commands from the user, printing out the command prompt (<kbd>cmd&gt;</kbd>) after it finishes
+a command, until the user enters the quit command (<kbd>q</kbd>).
+<p>
+Here are the commands for the program (in the following a name will
+always be a single word):
+<p>
+<DL>
+
+<DT> <KBD>i <EM>name score</EM> </KBD>
+<DD>
+Insert this name and score in the grade table.  If this name was
+already present, print a message to that effect, and don't do the
+insert.
+
+<DT> <KBD>c <EM>name newscore</EM></KBD>
+<DD>
+Change the score for name.
+Print an appropriate message if this name isn't present.
+
+<DT> <KBD>l <EM>name</EM></KBD>
+<DD>
+Lookup the name, and print out his or her score.
+
+<DT> <KBD>r <EM>name</EM></KBD>
+<DD>
+Remove this student.  If this student wasn't in the grade table, print
+a message to that effect.
+
+<DT> <KBD>p</KBD>
+<DD>
+Prints out all names and scores in the table.
+
+<DT> <KBD>n</KBD>
+<DD>
+Prints out the number of entries in the table.
+
+<DT> <KBD>s</KBD>
+
+<DD>
+Prints out statistics about the hash table at this point. (Calls
+hashStats() method)
+
+<DT> <KBD>h</KBD>
+<DD>
+(help)  Prints out a brief command summary.
+
+<DT> <KBD>q</KBD>
+
+<DD>
+Exits the program.
+</DL>
+<p>
+
+There is no error-checking required for this program.
+<p>
+
+Note: this program enables you to test all of the table methods.
+
+<a name="concord"><h3>The <kbd>concord</kbd> program</h3>
+
+This is a concordance program like the one we did in an earlier Java lecture
+and that we enhanced for lab 8, but that uses the Table class we're
+implementing here.  This version filters words, but it does not sort
+the output.  We wrote this whole program for you -- you will just need to complete your Table class to be able to compile and run it successfully.
+<p>
+You can use this program along with the <kbd>.txt</kbd> files that
+came with the assignment to test your Table class with a larger amount
+of data.  This program does not use all of the Table methods, so is
+not suitable as a complete test of your Table class.  See comments in
+<a href="concord.cpp">concord.cpp</a> for how to run it.
+<p>
+We also recommend you read the code in <a href="concord.cpp">concord.cpp</a>, as an
+example of how to use the Table class.
+
+
+<a name="devel"><h3>Program development and milestone</h3>
+</a>
+
+Here's a suggested development plan to help you succeed on this assignment:
+
+<ol> 
+
+<li> Think through what exact operations you will need on a single
+chain to implement the various Table methods.  Define the exact
+interface of functions to do these operations on a single linked list.
+These kinds of operations were discussed <a
+href="#listfuncs">here</a>.
+
+<p>
+<li>
+<strong>Milestone:</strong> By Thanksgiving (11/28) have all of your linked list routines written
+and tested. Because they don't depend on the private data of the hash
+table class (just the Node class) you can write a separate program to
+test these thoroughly, before you tackle any of code dealing with a
+dynamic array, etc.  More about doing this:
+<p>
+
+<ol>
+<li> Copy the Node class definition and Node member functions into a
+file called <kbd>pa5list.cpp</kbd>.  This will be a single-file
+program (i.e., you'll be able to compile it with a single g++
+command).
+
+<li> Write stub versions of the list functions you decided you needed
+as helper functions for Table.
+
+<li> Add a <kbd>main</kbd> program with thorough test cases for your
+list functions. I.e., testing them on hard-coded data.  You can test
+the code with stub versions of your list functions.
+
+<li> Implement and test your list functions using your test program.
+(You are not required to submit <kbd>pa5list.cpp</kbd>)
+</ol>
+<p>
+
+<li> Once you are convinced that your list code works copy the
+functions you wrote in the last step back into <kbd>Table.cpp</kbd>.
+[Note: it's not ideal to have two copies of this code floating around
+(one in your test program, and one in Table.cpp), but we're suggesting
+that here, to keep the file organization for this program a little
+simpler.]
+<p>
+
+<li> Implement the <kbd>insert</kbd> and
+<kbd>printAll</kbd> methods of <kbd>Table</kbd>, and test them with a partially written
+<kbd>grades.cpp</kbd>.
+<p>
+
+<li> Add other <kbd>Table</kbd> methods and the corresponding
+<kbd>grades.cpp</kbd> code that tests those methods to your program,
+one at a time, testing them as you go, until you have a completely
+working grades program.
+<p>
+
+<li> Test your <kbd>Table</kbd> class with <kbd>concord.cpp</kbd>
+running on the two story files given.
+
+</ol>
+
+
+<a name="style"><h3>Grading criteria</h3>
+
+This program will be graded approximately 80% on correctness, 20% on
+style and documentation.  As usual we will be using the <a
+href="../style.html">style guidelines</a> published for the class.
+<p>
+
+
+<a name="submit"><h3>README file / Submitting your program</h3>
+<p>
+Your <kbd>README</kbd> file must document known bugs in your program,
+contain the signed <a href="#certification" >certification</a> shown
+near the top of this document, and contain any special instructions or
+information for the grader.
+<p>
+
+Use the following command to submit your program:
+
+<pre>
+gmake submit
+</pre>
+<p>
+The <kbd>submit</kbd> rule in the <a
+href="Makefile"><kbd>Makefile</kbd></a> shows what files will be submitted using the above command.
+
+<hr>
+
+</body></html>

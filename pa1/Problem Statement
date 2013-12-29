@@ -1,0 +1,141 @@
+CS 455 Programming Assignment 1
+
+Introduction
+
+In this assignment you will write a graphics-based program to do a random walk, sometimes also known as a drunkard's walk. This random walk simulates the wandering of an intoxicated person on a square street grid. The drunkard will start out in the middle of the grid and will randomly pick one of the four compass directions, and take a step in that direction, then another step from that new location in a random direction, etc. This will be repeated some number of times determined by the user. The output will display the path of the drunkard as a sequence of line-segments. (This problem is adapted from programming problem P6.6 from the textbook.)
+
+This assignment will give you practice with creating classes, using loops, using the java library for random number generation, console-based IO, and drawing to a graphics window. Also you'll get practice in general program development.
+
+
+Resources
+
+Horstmann, Section 2.9, 2.10, 3.8, Programs that draw stuff
+Horstmann, Chapter 3, Implementing Classes
+Horstmann, Section 4.3.1, Reading input
+Horstmann, Section 6.9.1, Random numbers and Simulations
+The assignment files
+
+Getting the assignment starter files. Make a pa1 directory and cd into it. Copy all of the source code files and the README starter file from the pa1 directory of the course account to your own pa1 directory. We can accomplish the first part with Unix wildcards (denoted with a *): the first command below copies all files that have a .java suffix from the given directory to your current directory. Do the following two commands:
+cp ~csci455/assgts/pa1/*.java .
+cp ~csci455/assgts/pa1/README .
+The files in bold below are ones you create and/or modify and submit. The ones not in bold are ones you use, but not do modify or submit. The files are:
+
+Drunkard.java Your Drunkard class. The interface is provided. You will be completing the implementation, and a test driver for it.
+RandomWalkViewer.java Your RandomWalkViewer class. You create this file and class.
+RandomWalkComponent.java Your RandomWalkComponent class. You create this file and class.
+DrunkardTester.java Your unit test program for your Drunkard class. You create this file and class.
+ImPoint.java An immutable point class for use in this program. Do not modify or submit this file.
+ImPointTester.java Unit test program for ImPoint. Use this to test out ImPoint. Also can be used as an example of what a test program might look like. Do not submit this file.
+README for more about what goes in this file, see the section on README file. Before you start the assignment please read the following statement which you will be "signing" in the README:
+"I certify that the work submitted for this assignment does not violate USC's student conduct code. In particular, the work is my own, not a collaboration, and does not involve code created by other people, with the exception of the resources explicitly mentioned in the CS 455 Course Syllabus. And I did not share my solution or parts of it with other students in the course."
+For more information about the classes mentioned above see the section on Class design.
+The assignment
+
+Your program will prompt for the number of steps the drunkard is to take, error checking that a positive value is entered. (More details about error checking here.) This part of the program will be console-based, to keep things simpler (and faster if you are running it from aludra).
+Then it will display a 400x400 pixel window with the path the drunkard takes (see introduction for more information on that path). Each step is displayed as a 5-pixel line segment. The display will be the completed path, rather than an animation of the steps as they are taken, because doing the latter is beyond the scope of what we have covered so far. Because the path taken is random, subsequent runs with the same input will produce different results.
+
+Some paths may wander off the bounds of the window (making part of the walk invisible). That's ok.
+
+You may want debugging output that displays coordinates of each step to the console. It's ok if you leave in this debugging output for the final submitted program.
+
+Here is example output from one run of our solution to this assignment, where the drunkard takes 1000 steps.
+
+ 
+
+Remember, your output will not be identical to this because of the random nature of the results. Also, a note about the image above: the background came out a little funky in this document. You do not draw any grid: just a drunkard's path on a solid background.
+
+There are a few other requirements for the assignment discussed in the following sections. To summarize here, the other requirements are:
+
+you must create and use the classes mentioned in the section on Class design.
+you must include a test program for your Drunkard class describe further in the section on Testing the Drunkard class.
+you must create a README file discussed in the section about that.
+your program will also be evaluated on style and documentation. More about this in the section on grading criteria.
+
+More details of the error-checking
+
+As mentioned in the previous section, when your program prompts for the number of steps the drunkard is to take, you will error check that a positive value is entered. More specifically, we mean that on an invalid number of steps the program will print out a informative error message and then prompt and read again until the user enters a valid value. Example (user input shown in italics):
+Enter number of steps: -32
+ERROR: Number entered must be greater than 0.
+Enter number of steps: 0
+ERROR: Number entered must be greater than 0.
+Enter number of steps: 100
+Your program does not have to handle non-numeric input. (We will not test it on that case.)
+
+Class design
+
+To help you make your program object-oriented, we will give you the general class design for this program. This follows the conventions of graphical classes used in the textbook. You are required to use the following classes (ones in bold are ones you will be creating yourself and implementing):
+RandomWalkViewer. Contains the main routine. Prompts for the number of steps, and creates the JFrame containing the RandomWalkComponent. The later section on communicating information between objects will be useful when developing this and the next class listed.
+RandomWalkComponent. Extends JComponent. Constructor initializes any necessary data. Overrides paintComponent to draw the random walk, using a Drunkard object to keep track of current state of drunkard.
+Drunkard. A drunkard knows its current location and knows how to take a random step. Has a constructor that initializes it with a starting location. The other member functions are getCurrentLoc which returns its current location, and takeStep which takes a step (which includes modifying the drunkard's location). We are giving you the exact interface to use for this class. Do not change the interface when you incorporate it into your own program: we are going to test your Drunkard class with our own test driver; if you change the interface, it won't compile with our code. The Drunkard interface is in ~csci455/assgts/pa1/Drunkard.java.
+ImPoint. This is a complete class that we have provided for you. Use this class to represent a Drunkard's location. We're using an immutable class here, rather than one of the point classes from the Java library, to make the coding easier for you. When you use immutable objects, you don't have to worry about multiple references to the same object, or an object's value changing unexpectedly. In particular, do not use two separate x and y variables to represent locations, but take advantage of this class to make your code more object-oriented. For drawing with the graphics library you will need a different type of object, Point2D: the ImPoint class provides a method that returns a Point2D version of itself.
+java.util.Random. The java random number generator. See section 6.9 of the textbook for examples of its use. One thing to note about Random: it's a class that through a sequence of method calls generates a sequence of values that depend on the internal state of the object (in this way it is similar to Scanner). Students often want to create a new Random object every time they want a new random number. Don't do that. Instead, normally you create one Random object in your program, and then whenever you want a new random number you make another call to nextInt on that same object. (If you create a Random object every time you are not generating a pseudo-random sequence.)
+DrunkardTester. A program to test your Drunkard class independently from its use in the random walk program. It will have its own main method. Described in more detail in the section on testing the Drunkard class.
+Note: this list doesn't include all the java library classes that will be used in the program; for example RandomWalkComponent will need java.awt.Graphics.
+In your textbook there are examples of classes similar to the first two classes mentioned above. (See Resources section for relevant sections of text.) The third class, Drunkard does not depend on the graphical user interface of the program. In fact, we are going to require that you test this class independently of the rest of the program, and we'll give you more advice on doing so in the sections on incremental development and the one following that on testing.
+
+Incremental development
+
+So, why are we making you write the extra Drunkard test code? Any program of non-trivial size will be developed faster, with fewer bugs, using the technique of incremental development, which means developing, and testing pieces of the program incrementally. The incremental aspect is that your program may gradually grow until it includes the complete functionality. (Other people use different names for the same thing. Sometimes it's called building subsets.)
+
+A desirable feature of individual classes are that they are as independent as possible from the program that they are a part of. Some classes, such as String, or ArrayList (which we will see soon) are general-purpose and can be used in many different programs. Other classes are more special-purpose, such as Drunkard, but still are modules that can be separated from a particular program that uses them. We can test such a module using a unit-test, which is a program specially designed to test the module.
+
+We often unit-test one (or more) classes, and then once we are convinced that unit is working correctly, we can integrate that class with code that uses it. If this larger code base is now buggy, we can feel fairly certain that the bug is in the new code we added, since we already tested the class. So any time we find bugs, it's in a small program: much easier than locating bugs in large programs.
+
+For this assignment, the final product will not be a very large program, but we want to get you in the practice of using incremental development, so you will still be successful when you are trying to develop and debug much larger programs. Even in this program there are at least two distinct issues to deal with: (1) figuring out how to use the random-number generator to generate a sequence of random steps and (2) figuring out how to draw those steps on the screen. It will be much easier if we can deal with these issues one at a time, so we can isolate bugs related to each one more easily.
+
+Testing the Drunkard class
+
+You are actually going to submit two programs for this assignment, both of which use your Drunkard class. One is RandomWalkViewer, described earlier, that draws a random walk. The other is a console-based program, DrunkardTester, expressly written to thoroughly test your Drunkard class, without including the drawing functionality of the random walk program.
+We will use a different compile command to compile each of these programs. We can compile and run the test program with the following commands:
+
+javac DrunkardTester.java
+java DrunkardTester
+while we compile and run the larger program with these commands:
+javac RandomWalkViewer.java
+java RandomWalkViewer
+Although each of these are multi-file programs you only need to list the file that contains main in the compile command and javac figures out what other classes are used in that program and compiles those as well. Similarly, the only class name you give as the argument to the java virtual machine is the one containing main.
+As mentioned in the previous section a test program like DrunkardTester is called a unit test; we have discussed such unit tests in lecture, and they are also discussed in Section 3.4 of the textbook. You also have another test program example available in ImPointTester.java -- the test program for the ImPoint class you are using in this assignment.
+
+So, what should you put in your DrunkardTester? This will be a console-based program -- i.e., no GUI. We recommend you make it a non-interactive program (i.e., fixed data), that tests every member function multiple times, printing informative output to the console with the results of each operation, as well as predicted output, where possible (more about this in the next paragraph). In particular, it should create multiple Drunkard objects with different parameters to the constructor (i.e., including testing it with different step sizes), and call takeStep several times (possibly in a loop) for each one, printing out each location the Drunkard visits.
+
+Unlike the unit-test programs in the textbook and lecture, we can't predict the exact results of calls to takeStep, because of the random nature of the program. Instead, write code to test that each step taken
+
+only moves the Drunkard by stepSize coordinate units,
+only in one of the four compass directions.
+E.g., if stepsize is 1, and the Drunkard moved from (100,100) to (101,99) in a single step, that would fail the test; likewise if it moved from (100,100) to (100,102). In contrast (100,100) to (99,100) passes the test. Any time the drunkard fails the test, print out an informative error message, but keep running the rest of your tests. We will test your DrunkardTester with our own buggy Drunkard class.
+How to communicate information between objects
+
+There are several techniques to communicate information between classes and methods of classes, including via parameters and return values of methods. In particular, here we have the issue of receiving some information in main in RandomWalkViewer, that is, the number of steps, but needing to use that information in paintComponent in RandomWalkComponent. But, because this is a graphical program, our code doesn't call paintComponent, nor is it allowed to change the parameters passed to it.
+However, main creates the RandomWalkComponent object. We can indirectly communicate the number of steps by passing it to a RandomWalkComponent constructor we will write, saving its value as an instance variable in that object, so we can then later use it in RandomWalkComponent's paintComponent method.
+
+README file
+
+For this and all other programs you will be required to submit a text file called README with your assignment. In it you will initial the certification we mentioned earlier. This is also the place to document known bugs in your program. That means you should describe thoroughly any test cases that fail for the the program you are submitting. You should also document here what subset your solution implements, if you weren't able to complete the whole program (more about that in the next section). You can also use the README to give the grader any other special information, such as if there is some special way to compile or run your program (this would be unusual for students who completed the assignment).
+For this program, also put the answers to the following questions in the README:
+
+Why do paths taken by the drunkard have so many dead ends? (see sample output given earlier)
+paintComponent gets called every time a window gets redrawn. What happens to your program if you iconify (a.k.a., minimize) and then deiconify the window that has your graphics output? (i.e., while running "java RandomWalkViewer") Try it. Why?
+Do you have any ideas about how we could fix this problem? (You do not have to fix the problem, nor do you have to come up with the exact code/classes, etc., but rather, just a high-level idea(s).)
+Grading criteria
+
+This program will be graded based on correctness, style, and testing. Programs that do not compile will get little or no credit. However, an incomplete program can get some correctness points if it has partial functionality (you document the partial functionality in the README, discussed above). This grading policy is to encourage frequent testing of subsets (discussed more thoroughly in the section on incremental development). Also, for incomplete programs, the style score will be scaled according to how much is completed.
+We have published a more complete set of style guidelines for the course on the assignments page, but here are a few things to pay particular attention to for this program:
+
+documentation. You need to supply an overall comment for each class, and detailed comments about the interface of each member function. (We have already provided the interface comments for the Drunkard class since we specified that interface for you.) This was described in more detail in lecture and the textbook (see Section 3.2.4). Use inline comments to explain any confusing code ("this is a for loop" type comments are not helpful).
+named constants. There are some numbers mentioned in the assignment description. Each of these should be given a descriptive name (e.g., STEP_SIZE) in the program so it would be easy to change the value later. Named constants in Java are discussed in section 4.1.2 of the textbook.
+private data. You should never need public data. Rather, clients should only be able to access data through member functions. The rationale for this is discussed in section 3.1.3 of the textbook.
+good identifier names. Use descriptive names for variables, parameters, and methods.
+good/consistent indenting. Use the conventions from the textbook or lecture.
+For this program only, you do not have to worry too much about method length (guideline #7), and while you should document any instance variables that are not obvious from their names, you do not have to worry about implementation invariants (item #15).
+Implementing the required class design and answering the README questions will also be part of your style/documentation score.
+
+How to turn in your assignment
+
+No matter where/how you developed the code, we will be grading it on aludra using the java compiler and virtual machine there. Remember java on aludra is version 1.5, so you need to make sure it runs correctly on that platform.
+Make sure your name, loginid, course, and assignment are at the top of each file you submit (for source files, they would be inside of comments), for any assignment you submit for this course. You will lose a point on the assignment if this information is missing.
+
+To submit your assignments you will use a command called submit. So you don't make a mistake providing the arguments to this command, we have provided the exact command to use in a file called turninpa1. This type of file that contains Unix commands is called a shell script. To execute the commands in this shell script, you type:
+
+source ~csci455/assgts/pa1/turninpa1
+at the Unix prompt. It uses the exact file-names shown in bold earlier in the section about the assignment files. The submit command it runs should output a message saying that each of the five files were submitted successfully. If any of them failed (e.g., you used the wrong file name), once you fix the problem you can just call submit again. If you call submit multiple times with the same file names and options, the last version submitted is the one that will be graded: each submit of a particular file overwrites the previous one.
+The University of Southern California does not screen or control the content on this website and thus does not guarantee the accuracy, integrity, or quality of such content. All content on this website is provided by and is the sole responsibility of the person from which such content originated, and such content does not necessarily reflect the opinions of the University administration or the Board of Trustees

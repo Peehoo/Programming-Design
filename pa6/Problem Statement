@@ -1,0 +1,50 @@
+Programming Assignment 6
+
+Introduction and Background
+
+This is an extra credit assignment worth 5%. (So, someone with a perfect score who also got full marks on this could have 105 weighted points at the end, out of 100 points of required work.) It is open to anyone in the class, but is completely optional.
+The assignment is to implement some functions that operate on C++ linked lists. It's a little more like a lab, in that you just write those specific functions: we wrote all the test code for you. (However, I would expect it to take more time than a lab session to complete.) Unlike a lab you are required to do the work independently (i.e., no partnerships).
+
+Like PA5, this is a multi-file program with a Makefile that uses separate compilation. We did that primarily to give us the freedom to easily test your code using a different test driver than the one we gave you. Hopefully between the Makefile handout (readings for Week 15), the lectures this week, and the last assignment, you are feeling comfortable with multi-file C++ programs.
+
+
+The assignment files
+
+Getting the assignment files. Make a directory called 'ec' and cd into it. The following command will copy the necessary files to your current directory:
+gmake -f ~csci455/assgts/ec/Makefile getfiles
+The files in bold below are ones you modify and submit. The ones not in bold are ones that you will use, but not modify.
+
+listFuncs.h This contains the Node struct definition for our linked lists (but not the method implementations), commented prototypes for the functions you are required to write, and prototypes for a few list utility functions you may want to use (the utility functions are defined in ectest.cpp).
+listFuncs.cpp Implementation file for the the list functions required for this assignment. Stub versions of the functions are already provided so you can compile the program you download right from the start.
+ectest.cpp Test program for your list functions. This is a command-based program, similar to the testlist programs we used in lecture and lab to test linked list code we did there. You probably want to compile and run the program right away to see what it does.
+Makefile A file with rules for the "gmake" command. In particular this Makefile has rules to download the data files and itself, for compiling the source code to make the executables, and for submitting the program. There are comments at the top of the file telling you how to use it.
+README See section on Submitting your program for what to put in it. Before you start the assignment please read the following statement which you will be "signing" in the README:
+"I certify that the work submitted for this assignment does not violate USC's student conduct code. In particular, the work is my own, not a collaboration, and does not involve code created by other people, with the exception of the resources explicitly mentioned in the CS 455 Course Syllabus. And I did not share my solution or parts of it with other students in the course."
+The assignment
+
+Complete the implementation of the four functions buildSequence, bufferWithZeroes, split, and removeRunAtLoc, described in more detail in listFuncs.h. None of the functions depend on each other, and we will test each of them separately, so you can still get some extra credit by just implementing some of the functions.
+The complete specification for these functions (i.e., prototypes + function comments) are given in listFuncs.h. You put your implementations of these functions in listFuncs.cpp.
+
+Reminder about PRE/POST function comments. Some of the comments given use the PRE/POST style. The precondition is what has to be true about the parameters before the function call, and the postcondition is what's true about the parameters after the call.
+
+One note about split that may not be obvious from its description is that it's not meant to call new or delete: the nodes from the new lists are all ones from parameter list. So, it's destructive, in the sense that you can't use the old list after the call. To help the client not to reference a dangling pointer by mistake after calling the function, list is passed by reference, and one of the postconditions of split is that list is NULL (i.e., when the function returns).
+
+
+Grading criteria
+
+Unlike other programming assignments this one will be graded primarily on correctness. As usual, it is up to you to come up with thorough test cases for your code. You should be able to try out all those tests using the test driver provided (ectest.cpp).
+The other evaluation criterion is not wasting resources. For example, you will lose credit if you implement what should be an O(n) function in O(n2), or if you have memory leaks, e.g., by doing unnecessary calls to new, or not reclaiming memory no longer needed.
+
+We will not be evaluating your code on style, except that if your code is so messy/unreadable that we can't evaluate the aspects mentioned in the previous paragraph you will just lose credit for that part. (I would hope things like using good names and consistent indenting are automatic for you by now.) You are not required to write helper functions, but it may make the rest of your code easier/shorter to write if you do factor repeated code into helper functions.
+
+The scoring breakdown will be roughly 20 percent for each of the first two functions, and 30 percent for each of the last two.
+
+
+README file / Submitting your program
+
+Your README file must document which of the functions you successfully completed and known bugs in your program (this might be in the form of test cases you tried, but that didn't work). It will also contain the signed certification shown near the top of this document.
+
+Use the following command to submit your program:
+
+gmake submit
+The University of Southern California does not screen or control the content on this website and thus does not guarantee the accuracy, integrity, or quality of such content. All content on this website is provided by and is the sole responsibility of the person from which such content originated, and such content does not necessarily reflect the opinions of the University administration or the Board of Trustees

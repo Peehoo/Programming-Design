@@ -1,5 +1,8 @@
 package practice_code;
 
+/**
+ * Convert String to Long without using any inbuild functions
+ */
 public class StringToLong {
 	public static void main(String args[]){
 		System.out.println(stringToLong("123"));

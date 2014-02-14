@@ -27,11 +27,11 @@ public class TrinaryTree<T extends Comparable<T>>{
 		tree.insert(2);
 		tree.insert(2);
 		System.out.println(tree.toString());
-		tree.remove(tree.root);
+		tree.remove(2);
 		System.out.println(tree.toString());
-		tree.remove(tree.root.right);
+		tree.remove(7);
 		System.out.println(tree.toString());
-		tree.remove(tree.root.left);
+		tree.remove(5);
 		System.out.println(tree.toString());
 	}
 
@@ -73,13 +73,44 @@ public class TrinaryTree<T extends Comparable<T>>{
 			}
 		}
 	}
+	/**
+	 * Returns the node whose data is equal to value to be deleted
+	 * @param root
+	 * @param value
+	 * @return
+	 */
+	private Node<T> searchNode(Node<T> root, T value){
+		if(value.compareTo(root.data)==0){
+			return root;
+		}
+		else if(value.compareTo(root.data)<0){
+			return searchNode(root.left,value);
+		}
+		else return searchNode(root.right,value);
+	}
+	
+	/**
+	 * Removes a node whose data is equal to the value to be deleted
+	 * @param value
+	 * @return
+	 */
+	public boolean remove(T value){
+		if(root==null){
+			return false;
+		}
+		else if(searchNode(root, value)!=null){
+			return remove(searchNode(root, value));
+		}
+		return false;
+	}
+	
 
 	/**
 	 * PRE : node is not null
 	 * @param node
 	 * @return
 	 */
-	public boolean remove(Node<T> node){
+	private boolean remove(Node<T> node){
 		Node<T> parent = findParent(node);
 		if(parent==null && !(root.equals(node))){
 			return false;

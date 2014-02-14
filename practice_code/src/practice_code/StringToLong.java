@@ -12,11 +12,11 @@ public class StringToLong {
 	 */
 	public static long stringToLong(String s){
 		boolean isNegative = false;
-		if(s.charAt(0)=='-'){
+		if(s.charAt(0)=='-'){			//checking if its a negative number
 			isNegative = true;
-			s = s.substring(1);
+			s = s.substring(1);			//ignoring the first character and later multiplying by -1
 		}
-		if(s.charAt(0)=='+'){
+		if(s.charAt(0)=='+'){			//ignoring the first character
 			s = s.substring(1);
 		}
 		char[] stringArray = s.toCharArray();
@@ -24,7 +24,7 @@ public class StringToLong {
 		int digit;
 		long number=0;
 		for(char c: stringArray){
-			digit = c - '0';
+			digit = c - '0';			//subtracting ASCII value to get the number
 			if(digit>=0 && digit<=9){
 				number+=digit*Math.pow(10, j--);
 			}

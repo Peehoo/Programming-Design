@@ -19,9 +19,16 @@ public class TrinaryTree<T extends Comparable<T>>{
 		tree.insert(9);
 		tree.insert(5);
 		tree.insert(7);
+		tree.insert(6);
 		tree.insert(2);
 		tree.insert(2);
+		System.out.println(tree.toString());
 		tree.remove(tree.root);
+		System.out.println(tree.toString());
+		tree.remove(tree.root.right);
+		System.out.println(tree.toString());
+		tree.remove(tree.root.left);
+		System.out.println(tree.toString());
 	}
 
 	public void insert(T data){
@@ -69,7 +76,6 @@ public class TrinaryTree<T extends Comparable<T>>{
 	 * @return
 	 */
 	public boolean remove(Node<T> node){
-
 		Node<T> parent = findParent(node);
 		if(parent==null && !(root.equals(node))){
 			return false;
@@ -246,6 +252,44 @@ public class TrinaryTree<T extends Comparable<T>>{
 		public Node(T data) {
 			this(data, null,null, null);
 		}
-	} // end of Node
+	} 
+	
+	public String toString() {
+	    StringBuilder string = new StringBuilder("[");
+	    helpToString(root, string);
+	    string.append("]");
+	    return string.toString();
+	}
 
+	/**
+	 * Recursive help method for toString. 
+	 * 
+	 * @param node
+	 * @param string
+	 */
+	private void helpToString(Node<T> node, StringBuilder string) {
+	    if (node == null)
+	        return; // Tree is empty, so leave.
+
+	    if (node.left != null) {
+	        helpToString(node.left, string);
+	        string.append(", ");
+	    }
+
+	    string.append(node.data);
+
+	    if (node.middle != null) {
+	        string.append(" ");
+	        helpToString(node.middle, string);
+	    }
+	    
+	    if (node.right != null) {
+	        string.append(", ");
+	        helpToString(node.right, string);
+	    }
+	}
+
+	
+	
+	
 }

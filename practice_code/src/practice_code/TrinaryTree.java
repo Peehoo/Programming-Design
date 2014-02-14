@@ -1,6 +1,10 @@
 package practice_code;
 
-
+/**
+*Insertion and Deletion in Trinary Tree. Trinary tree is similar to binary tree
+*where the values less are to the left of node, values greater are to the right
+*of the node and values equal to the node are the middle child of node 
+*/
 public class TrinaryTree<T extends Comparable<T>>{
 	private Node<T> root;
 

@@ -273,7 +273,7 @@ public class TrinaryTree<T extends Comparable<T>>{
 	}
 
 
-	private class Node<T> {
+	public class Node<T> {
 		private T data;
 		private Node<T> left, middle, right;
 

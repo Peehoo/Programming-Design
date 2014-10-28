@@ -1,0 +1,32 @@
+After reading the problem description, I thought about using visitor pattern for 
+implementing the task. The reason I decided to use this pattern was because I noticed 
+that there would be many different items like books, food, medicines, other types etc 
+but they would have similar tax calculation functionality (although the implementations 
+might differ). For handling the different implementations I would make use of the visit()
+methods of Visitor interface implementation.
+
+I have an interface implementation for an Item. This interface has a method called 
+accept() which takes in an object of type Visitor. Book.java, Food.java, Medicine.java 
+and OtherItemType.java are concrete implementations of the Item interface. The 
+implementation of accept() method in concrete classes calls visit() method of Visitor
+and passes itself as argument. This helps decide which visit method to call. The 
+implementation of the visit() method depends on both the dynamic type of the item and 
+the dynamic type of the visitor. So with the help of the visitor pattern, we can separate
+the algorithm from the object structure (in this case the Item) on which it operates.
+
+Advantages of using this pattern:
+1. Since we have separated out the logic of tax calculation from the actual 
+implementation of the item class, we would only need to change the visitor class in case 
+there is some change made to the logic. This saves us a lot of time because if we had 
+the logic implementation in the item class, then we would have to change all item classes.
+
+2. Adding more items is easy and does not require any change to the already existing code
+except adding another specific visit method to the visitor class.
+
+3. Adding new functionality like coupon calculation on the items can be done by 
+implementing a Coupon Visitor and we do not need to change a single line of code in 
+the classes implementing Items.
+
+
+In order to run the code, you just have to run SalesTaxApp.java and the output will 
+be displayed.

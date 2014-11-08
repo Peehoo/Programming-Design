@@ -1,0 +1,9 @@
+[
+StopwatchRecord(key='render_module',start_time=101.0,end_time=105.0),
+StopwatchRecord(key='get_data',start_time=101.1,end_time=101.2),
+StopwatchRecord(key='get_data',start_time=101.5,end_time=103.0),
+StopwatchRecord(key='cache_get_data',start_time=101.6,end_time=101.7),
+StopwatchRecord(key='db_get_data',start_time=101.8,end_time=102.9),
+StopwatchRecord(key='render_module',start_time=103.1,end_time=104.9),
+StopwatchRecord(key='render_module',start_time=105.1,end_time=106.0),
+]

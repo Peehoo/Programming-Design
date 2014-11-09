@@ -1,20 +1,35 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.Stack;
+
+/**
+ * I tested for the input given in the booklet
+[
+StopwatchRecord(key='render_module',start_time=101.0,end_time=105.0),
+StopwatchRecord(key='get_data',start_time=101.1,end_time=101.2),
+StopwatchRecord(key='get_data',start_time=101.5,end_time=103.0),
+StopwatchRecord(key='cache_get_data',start_time=101.6,end_time=101.7),
+StopwatchRecord(key='db_get_data',start_time=101.8,end_time=102.9),
+StopwatchRecord(key='render_module',start_time=103.1,end_time=104.9),
+StopwatchRecord(key='render_module',start_time=105.1,end_time=106.0),
+]
+ * @author peehoo
+ *
+ */
 
 
 public class StopwatchRecord {
 
 	private String key;
-	private double start_time;
-	private double end_time;
+	private double startTime;
+	private double endTime;
 
-	public StopwatchRecord(String key, double start_time, double end_time){
-		this.end_time = end_time;
-		this.start_time = start_time;
+	public StopwatchRecord(String key, double startTime, double endTime){
+		this.endTime = endTime;
+		this.startTime = startTime;
 		this.key = key;
 	}
 
@@ -22,12 +37,12 @@ public class StopwatchRecord {
 		return key;
 	}
 
-	public double getStart_time() {
-		return start_time;
+	public double getStartTime() {
+		return startTime;
 	}
 
-	public double getEnd_time() {
-		return end_time;
+	public double getEndTime() {
+		return endTime;
 	}
 
 	private static StopwatchRecord getStopwatchRecord(String line) {
@@ -58,7 +73,7 @@ public class StopwatchRecord {
 		System.out.println("Enter the records : \n");
 
 		try{
-			InputStreamReader in = new InputStreamReader(new FileInputStream(new File("inputRecords")));
+			InputStreamReader in = new InputStreamReader(System.in);
 			BufferedReader br = new BufferedReader(in);
 			String line;
 			Stack<StopwatchRecord> records = new Stack<StopwatchRecord>();
@@ -67,19 +82,20 @@ public class StopwatchRecord {
 				StopwatchRecord record = getStopwatchRecord(line);
 				if(record!=null){
 					if(records.isEmpty()){
+						System.out.println("\n");
 						prettyPrintRecord(record, indentationLevel);
 						records.push(record);
 					}
 					else{
 						StopwatchRecord temp = records.peek();
-						if((temp.getStart_time() < record.getStart_time()) && 
-								(temp.getEnd_time() > record.getEnd_time())){
+						if((temp.getStartTime() < record.getStartTime()) && 
+								(temp.getEndTime() > record.getEndTime())){
 							indentationLevel++;
 							prettyPrintRecord(record, indentationLevel);
 							records.push(record);
 						}
 						else{
-							while(!records.isEmpty() && temp.getEnd_time() < record.getStart_time()){
+							while(!records.isEmpty() && temp.getEndTime() < record.getStartTime()){
 								records.pop();
 								indentationLevel--;
 								if(!records.isEmpty()){
@@ -95,8 +111,10 @@ public class StopwatchRecord {
 			}
 			br.close();	
 		}
-		catch(Exception e){
-			e.printStackTrace();
+		catch(FileNotFoundException e){
+			System.out.println("\n No input file found");
+		} catch (IOException e) {
+		System.out.println("\n Unexpected IO Exception");
 		}
 	}
 
@@ -113,7 +131,7 @@ public class StopwatchRecord {
 		String str = this.getKey().replaceAll("'", "");
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
-		return this.start_time + " " + sb.toString() + "[" + df.format(this.end_time - this.start_time) + "]" + " "
+		return this.startTime + " " + sb.toString() + "[" + df.format(this.endTime - this.startTime) + "]" + " "
 				+ str;
 	}
 }
